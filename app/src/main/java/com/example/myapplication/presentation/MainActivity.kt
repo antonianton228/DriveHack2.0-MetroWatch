@@ -30,9 +30,22 @@ import ru.mosmetro.metro.map.data.models.schema.data.StationResponse
 import java.util.Arrays
 
 
+class Node {
+    var currentCost = 0;
+    var id = 0
+    var idTo = mutableListOf<Int>();
+    var CostTo = mutableListOf<Int>();
 
 
+    fun setId(id_: Int) {
+        id = id_;
+    }
 
+    fun setCost(Cost_: Int) {
+        currentCost = Cost_;
+    }
+
+}
 
 
 
@@ -48,6 +61,14 @@ class MainActivity : ComponentActivity() {
     var currentId = 0
 
 
+
+
+
+    var s = mutableSetOf<Node>()
+    var w = 0
+
+
+   var listOfNods = mutableListOf<Node>()
 
 
 
@@ -144,7 +165,32 @@ val client = HttpClient(CIO){
 }
         val customer: Answer = client.get("https://devapp.mosmetro.ru/api/schema/v1.0/").body()
         StationsList = customer.data.stations.toMutableList();
+        var connectionslist = customer.data.connections.toMutableList()
+    var flag = true;
+        for( i in connectionslist){
+            for(k in listOfNods){
+                if(i.id in k.idTo){
+                    flag = false;
+                }
+            }
+            if(flag){
+                var timeNode = Node();
+                timeNode.setId(i.stationFromId)
+                timeNode.currentCost = 10000000
+                timeNode.idTo += i.id
+                timeNode.currentCost += i.
+            }
+            else{
+
+            }
+
+
+
+        }
+
+
         Toast.makeText(applicationContext, "" + customer.success, Toast.LENGTH_SHORT).show()
+
 
     }
 
