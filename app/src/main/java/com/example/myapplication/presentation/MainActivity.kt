@@ -6,70 +6,62 @@
 
 package com.example.myapplication.presentation
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Dispatchers
-import android.app.ActionBar
 import android.os.Bundle
-import android.os.Debug
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.R
-import com.google.android.gms.common.Feature
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpRequest
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.net.URI
-import java.net.URL
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
-import io.ktor.http.ContentType.Application.Cbor
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-import ru.mosmetro.metro.map.data.models.schema.Answer
-import ru.mosmetro.metro.map.data.models.schema.SchemaResponse
-import ru.mosmetro.metro.map.data.models.schema.data.AdditionalResponse
-import ru.mosmetro.metro.map.data.models.schema.data.ConnectionResponse
-import ru.mosmetro.metro.map.data.models.schema.data.LineResponse
-import ru.mosmetro.metro.map.data.models.schema.data.StationResponse
-import ru.mosmetro.metro.map.data.models.schema.data.TransitionResponse
-
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.cbor.*
-import kotlinx.serialization.cbor.*
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
+import ru.mosmetro.metro.map.data.models.schema.Answer
+import ru.mosmetro.metro.map.data.models.schema.data.StationResponse
+import java.util.Arrays
+
+
+
+
+
+
+
 
 
 class MainActivity : ComponentActivity() {
-    var list = mutableListOf<Int>()
+    var list = mutableListOf<Int>(1, 2)
+    var listOfId = mutableListOf<Int>(0, 0)
     var counter = 1;
     private val client = OkHttpClient()
     private val jsonText = ""
+    var StationsList = mutableListOf<StationResponse>();
+
+    var currentId = 0
 
 
+
+
+
+
+
+
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        GlobalScope.launch (Dispatchers.Main){
+           update();}
+        openMenu()
 
-
-        AddStation(View(this))
-        AddStation(View(this))
 
     }
 
@@ -77,23 +69,27 @@ class MainActivity : ComponentActivity() {
     fun AddStation(viev: View){
 
 
-        var lay = findViewById<LinearLayout>(R.id.Lay);
-        val button = Button(this)
-        button.text = "Выберите станию"
-        button.id = counter;
-        button.setOnClickListener {
-            ClickedStationButton(button.id)
-        }
-        list += counter;
-        counter += 1;
-        lay.addView(button)
+        list += list[list.lastIndex] + 1;
+        listOfId += 0
+        openMenu()
 
     }
     fun openMenu(){
-        var lay = findViewById<LinearLayout>(R.id.Lay);
+        val lay = findViewById<LinearLayout>(R.id.Lay);
+        lay.removeAllViews()
         for (i in list){
             val button = Button(this)
-            button.text = "Выберите станию"
+            if(listOfId[list.indexOf(i)] == 0){
+                button.text = "Выберите станию"
+            }
+            else{
+                for(j in StationsList){
+                    if (j.id == listOfId[list.indexOf(i)]){
+                        button.text = j.name.ru
+                    }
+                }
+            }
+
             button.id = i;
             button.setOnClickListener {
 
@@ -110,14 +106,32 @@ class MainActivity : ComponentActivity() {
             var lay = findViewById<LinearLayout>(R.id.Lay);
             lay.removeAllViews()
             list.removeLast()
+            listOfId.removeLast()
             openMenu()
 
         }
     }
    fun ClickedStationButton(id: Int){
-       GlobalScope.launch (Dispatchers.Main){
-        update();}
-        setContentView(R.layout.pick_activity)
+       setContentView(R.layout.pick_activity)
+       var Lay = findViewById<LinearLayout>(R.id.Layout)
+       Toast.makeText(applicationContext, "" + id, Toast.LENGTH_SHORT).show();
+        currentId = id;
+       Lay.removeAllViews()
+       for(i in StationsList){
+           val button = Button(this)
+           button.text = i.name.ru.toString()
+           button.id = i.id;
+           button.setOnClickListener {
+
+               PickStation(button.id)
+
+           }
+Lay.addView(button)
+       }
+
+
+
+
     }
 
 
@@ -127,18 +141,26 @@ val client = HttpClient(CIO){
     install(ContentNegotiation){
         json(Json { ignoreUnknownKeys=true })
     }
-
-
-
-
-
-
-
 }
         val customer: Answer = client.get("https://devapp.mosmetro.ru/api/schema/v1.0/").body()
+        StationsList = customer.data.stations.toMutableList();
         Toast.makeText(applicationContext, "" + customer.success, Toast.LENGTH_SHORT).show()
 
     }
 
+
+    fun PickStation(id: Int){
+        listOfId[list.indexOf(currentId)] = id
+Toast.makeText(applicationContext, "" + id, Toast.LENGTH_SHORT).show()
+        setContentView(R.layout.main_activity)
+        openMenu()
+    }
+
+
+
+
+
+
 }
+
 
