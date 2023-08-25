@@ -10,6 +10,7 @@
         android:layout_width="25dp"
         android:layout_height="29dp"
         android:layout_marginStart="1dp"
+        android:backgroundTint="#00FFFFFF"
         android:onClick="openMain"
         android:src="@drawable/abc_vector_test"
         app:layout_constraintBottom_toTopOf="@+id/scrollView3"

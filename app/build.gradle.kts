@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-location:15.0.1")
     val ktor_version = "2.3.3"
     implementation("io.ktor:ktor-serialization-kotlinx-cbor:$ktor_version")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")

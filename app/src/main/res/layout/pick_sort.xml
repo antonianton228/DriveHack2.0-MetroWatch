@@ -9,6 +9,7 @@
         android:id="@+id/imageButton2"
         android:layout_width="25dp"
         android:layout_height="29dp"
+        android:backgroundTint="#00FFFFFF"
         android:onClick="openMain"
         android:src="@drawable/abc_vector_test"
         tools:layout_editor_absoluteX="0dp"
@@ -27,7 +28,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="61dp"
             android:orientation="horizontal">
 
             <ImageButton
@@ -35,16 +36,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:onClick="openalphavite"
-                android:src="@android:drawable/btn_star" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_alf_w"
+                android:tint="#4E90BD" />
 
             <ImageButton
                 android:id="@+id/imageButton4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:onClick="openLineSort"
-                android:src="@android:drawable/btn_star" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_lines" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,14 +63,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@android:drawable/btn_star" />
+                android:backgroundTint="#00FFFFFF"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_history"
+                android:tint="#FFFFFF" />
 
             <ImageButton
                 android:id="@+id/imageButton7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@android:drawable/btn_star" />
+                android:backgroundTint="#00FFFFFF"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_area__1_" />
         </LinearLayout>
 
     </LinearLayout>

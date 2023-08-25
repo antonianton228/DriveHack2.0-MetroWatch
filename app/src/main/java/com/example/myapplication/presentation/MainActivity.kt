@@ -8,8 +8,12 @@ package com.example.myapplication.presentation
 
 import AlgorithmAStar
 import Graph
+import android.Manifest
 import android.app.ActionBar.LayoutParams
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -19,7 +23,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.core.app.ActivityCompat
 import com.example.myapplication.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -85,7 +92,7 @@ class MainActivity : ComponentActivity() {
     var Nods = mutableListOf<Node>();
     var currentId = 0
 
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
 
@@ -97,6 +104,8 @@ class MainActivity : ComponentActivity() {
         GlobalScope.launch (Dispatchers.Main){
             update();
             setContentView(R.layout.main_activity)
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(applicationContext)
+            location()
             openMenu()}
 
 
@@ -106,6 +115,38 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    fun location(){
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationClient.getLastLocation()
+            .addOnSuccessListener { location->
+                if (location != null) {
+                    Toast.makeText(applicationContext, location.latitude.toString(), Toast.LENGTH_SHORT).show()
+                     }
+                else{
+
+                }
+
+            }
+
+
+    }
 
     fun AddStation(viev: View){
 

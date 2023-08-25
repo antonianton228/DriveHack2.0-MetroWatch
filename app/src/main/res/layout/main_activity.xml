@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/common_google_signin_btn_icon_dark_normal_background">
+    android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+    android:backgroundTint="#000000">
 
     <ImageButton
         android:id="@+id/AddButton"
@@ -18,7 +19,6 @@
         android:src="@drawable/ellipse_1__1_"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 
     <ScrollView
@@ -63,17 +63,16 @@
 
     <Button
         android:id="@+id/Accept"
-        android:onClick="result"
-        android:layout_width="105dp"
-        android:layout_height="35dp"
+        android:layout_width="108dp"
+        android:layout_height="39dp"
         android:layout_marginStart="36dp"
         android:layout_marginEnd="36dp"
         android:backgroundTint="#00FF0B"
+        android:onClick="result"
         android:text="Принять"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
